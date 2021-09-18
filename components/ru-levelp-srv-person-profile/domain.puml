@@ -1,0 +1,90 @@
+@startuml ru-levelp-srv-person-profile-domain
+
+!include ./common/plantuml/domain.plantuml
+
+class Person {
+    + id: UUID [1]
+    + email: String [1]
+    + phoneNumber: String [1]
+    + role: PersonRole [1]
+    + identity: Identity
+    + address: Address
+    + socialNetworks: PersonSocialNetwork [0..*]
+    + messengers: PersonMessenger [0..*]
+}
+
+enum PersonRole {
+    STUDENT
+    LECTOR
+    WORK_INSPECTOR
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+class Identity {
+    + firstName: String [1]
+    + lastName: String [1]
+    + middleName: String [0..1]
+    + gender: Gender
+    + dateOfBirth: Date
+    + placeOfBirth: String
+    + placeOfWork: String
+    + passport: Passport [0..1]
+}
+
+class Passport {
+    + series: Integer [1]
+    + number: Integer [1]
+    + placeOfIssue: String [1]
+    + dateOfIssue: Date [1]
+    + departmentCode: String [0..1]
+}
+
+class Address {
+    + street: String
+    + houseNumber: Integer
+    + houseBuilding: Integer [0..1]
+    + houseLetter: String [0..1]
+    + flat: Integer [0..1]
+    + city: String
+    + postalCode: String
+}
+
+class PersonSocialNetwork {
+    + id: UUID [1]
+    + person: Person [1]
+    + socialNetwork: SocialNetwork [1]
+    + link: String [1]
+}
+
+class SocialNetwork {
+  + id: String [1]
+}
+
+class PersonMessenger {
+    + id: UUID [1]
+    + person: Person [1]
+    + messenger: Messenger [1]
+    + nickname: String [1]
+}
+
+class Messenger {
+    + id: String [1]
+}
+
+Person "1" *-- "0..1" Identity
+Person "1" *-- "0..1" Address
+PersonRole "1" --o "0..*" Person
+Gender "1" --o "0..*" Identity
+Passport "0..1" --* "1" Idenity
+
+PersonSocialNetwork "0..*" --* "1" Person
+SocialNetwork "1" -o "0..*" PersonSocialNetwork
+
+PersonMessenger "0..*" --* "1" Person
+Messenger "1" -o "0..*" PersonMessenger
+
+@enduml

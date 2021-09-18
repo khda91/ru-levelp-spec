@@ -1,0 +1,232 @@
+@startuml
+
+!define COLOR_DEFAULT_BACKGROUND #f5c276
+!define COLOR_DEFAULT_TEXT Black
+!define COLOR_DARK #383838
+!define COLOR_YELLOW #FFCD00
+!define COLOR_BLACK #000000
+!define COLOR_WHITE #ffffff
+
+!define FONT_FIRA_MONO Fira Mono
+!define FONT_FIRA_CODE Fira Code
+!define FONT_FIRA_SANS Fira Sans
+
+skinparam backgroundcolor transparent
+
+skinparam defaultFontColor COLOR_DEFAULT_TEXT
+'skinparam defaultFontName FONT_FIRA_MONO
+skinparam defaultFontSize 14
+skinParam defaultFontStyle plain
+
+skinparam dpi 90
+
+'Controls how lines are drawn in PlantUML
+'values: otho, polyline, splines (default)
+skinparam linetype ortho
+
+'Distance between elements (vertically, default: 30)
+'skinparam nodesep 30
+
+'Controls the padding surrounding text
+skinparam padding 1
+
+'Distance between elements (horizontally, default: 30)
+'skinparam ranksep 30
+
+'Line below ensures all classes have the same width in UML class diagram
+skinparam SameClassWidth true
+
+'Uncomment line below to disable shadows
+skinparam Shadowing false
+
+skinparam activity {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+  DiamondBackgroundColor COLOR_DEFAULT_BACKGROUND
+  DiamondBorderColor COLOR_DARK
+}
+
+skinparam actor {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam agent {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam arrow {
+  Color COLOR_DARK
+  FontColor COLOR_DEFAULT_TEXT
+}
+
+skinparam artifact {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam biddable {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam boundary {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam card {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam class {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+  FontStyle bold
+  HeaderBackgroundColor COLOR_DEFAULT_BACKGROUND
+}
+
+skinparam cloud {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam collections {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam component {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+  Style uml2  
+}
+
+skinparam control {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam database {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam designed {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam domain {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam entity {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam file {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam folder {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam frame {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam interface {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam object {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+  FontStyle bold
+}
+
+skinparam node {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam note {
+  BackgroundColor COLOR_YELLOW
+  BorderColor COLOR_BLACK
+  FontName FONT_FIRA_SANS
+}
+
+skinparam package {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam participant {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam queue {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam rectangle {
+  BackgroundColor COLOR_WHITE
+  BorderColor COLOR_DARK
+}
+
+skinparam sequence {
+  DividerBackgroundColor COLOR_WHITE
+  DividerBorderColor COLOR_DARK
+  DividerFontStyle bold
+  GroupBackgroundColor COLOR_DEFAULT_BACKGROUND
+  GroupBodyBackgroundColor COLOR_WHITE
+  GroupFontStyle bold
+  GroupHeaderFontStyle bold
+  LifeLineBackgroundColor COLOR_WHITE
+  LifeLineBorderColor COLOR_DARK
+  ReferenceBackgroundColor COLOR_WHITE
+  ReferenceHeaderBackgroundColor COLOR_DEFAULT_BACKGROUND
+}
+
+skinparam stack {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam state {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+  StartColor COLOR_DARK
+  EndColor COLOR_DARK
+}
+
+skinparam storage {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+skinparam title {
+  FontName FONT_FIRA_SANS
+  FontSize 16
+}
+
+skinparam usecase {
+  BackgroundColor COLOR_DEFAULT_BACKGROUND
+  BorderColor COLOR_DARK
+}
+
+
+
+@enduml
