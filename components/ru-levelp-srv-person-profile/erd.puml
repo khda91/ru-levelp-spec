@@ -1,6 +1,6 @@
 @startuml ng-platform-srv-person-profile-erd
 
-!include ./common/plantuml/erd.plantuml
+!include ../../common/plantuml/erd.plantuml
 
 entity person {
     id: binary(16) <<PK>>

@@ -1,0 +1,377 @@
+openapi: 3.0.3
+
+info:
+  title: 'LevelUp Platform API: Person profile'
+  description: REST API exposed by the microservice _ru-levelp-srv-person-profile_.
+  version: '1.0'
+  contact:
+    name: Dmitry Khodakovsky
+    email: khda91@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /people:
+    get:
+      description: Returns all people found according to the search criteria.
+      operationId: getPeople
+      parameters:
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/limit'
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/offset'
+        - name: email
+          description: Person's email
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 255
+            example: 'person@mail.ru'
+        - name: role
+          description: |
+            The comma-separated list of people roles to filter the search results.
+            Only people with the given roles are provided.
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/personRole'
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: The request has been successfully processed. The body contains the result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonListResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /person:
+    post:
+      description: Creates a new person record.
+      operationId: createPerson
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonData'
+      responses:
+        '201':
+          description: The request has been successfully processed. The body contains the results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /person/{personId}:
+    parameters:
+      - $ref: '#/components/parameters/personId'
+    get:
+      description: Returns profile data of the given person.
+      operationId: getPerson
+      responses:
+        '200':
+          description: The person profile has been successfully found. The body contains the result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+
+components:
+  parameters:
+    personId:
+      description: Universally unique identifier of the person.
+      name: personId
+      in: path
+      required: true
+      schema:
+        $ref: '../../common/rest/primitives.yaml#/components/schemas/personId'
+
+  schemas:
+    personRole:
+      description: The role of the person in the LevelUp Trainig Center
+      type: string
+      enum: [ STUDENT, LECTOR, WORK_INSPECTOR ]
+      example: 'LECTOR'
+
+    socialNetworkId:
+      description: Universally unique and immutable identifier of the social network.
+      type: string
+      maxLength: 255
+      example: 'LINKED_IN'
+
+    messengerId:
+      description: Universally unique and immutable identifier of the messenger.
+      type: string
+      maxLength: 255
+      example: 'TELEGRAM'
+
+    CreatePersonData:
+      description: Represents attributes required to create a new person record.
+      type: object
+      properties:
+        role:
+          $ref: '#/components/schemas/personRole'
+        email:
+          description: Email of the person.
+          type: string
+          maxLength: 255
+          example: 'person@mail.ru'
+        phoneNumber:
+          description: Phone number of the person.
+          type: string
+          maxLength: 255
+          example: '+79211234567'
+        identity:
+          $ref: '#/components/schemas/IdentityData'
+        address:
+          $ref: '#/components/schemas/AddressData'
+      required:
+        - email
+        - role
+        - phoneNumber
+
+    PersonResponse:
+      description: Response containing a person profile.
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PersonData'
+      required:
+        - data
+
+    PersonData:
+      description: Represents the main set of a person's attributes.
+      type: object
+      properties:
+        id:
+          description: Universally unique and immutable identifier of the person.
+          type: string
+          maxLength: 255
+          example: '123e4567-e89b-12d3-a456-426655440000'
+        role:
+          $ref: '#/components/schemas/personRole'
+        email:
+          description: Email of the person.
+          type: string
+          maxLength: 255
+          example: 'person@mail.ru'
+        phoneNumber:
+          description: Phone number of the person.
+          type: string
+          maxLength: 255
+          example: '+79211234567'
+        identity:
+          $ref: '#/components/schemas/IdentityData'
+        address:
+          $ref: '#/components/schemas/AddressData'
+        socialNetworks:
+          description: List of person's accounts in social networks.
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonSocialNetworkData'
+        messengers:
+          description: List of person's accounts in messengers.
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonMessengerData'
+      required:
+        - id
+        - role
+        - email
+        - phoneNumber
+        - socialNetworks
+        - messengers
+
+    IdentityData:
+      description: Represents a person's personal data
+      type: object
+      properties:
+        firstName:
+          description: First name of the person.
+          type: string
+          maxLength: 255
+          example: 'Vasily'
+        lastName:
+          description: Last name of the person.
+          type: string
+          maxLength: 255
+          example: 'Pupkin'
+        middleName:
+          description: Middle name of the person.
+          type: string
+          maxLength: 255
+          example: 'Ivanovich'
+        gender:
+          description: Unique identifier of the gender of the person.
+          type: string
+          maxLength: 255
+          example: MALE
+        dateOfBirth:
+          description: Date of a person's birth.
+          type: string
+          format: date
+          example: '1980-02-07'
+        placeOfBirth:
+          description: City of person's birth
+          type: string
+          maxLength: 255
+          example: 'Moscow'
+        passport:
+          $ref: '#/components/schemas/PassportData'
+
+    PassportData:
+      description: Represents a person's passport data
+      type: object
+      properties:
+        series:
+          description: Series of person's pasport.
+          type: integer
+          format: int32
+          minLength: 4
+          maxLength: 4
+          example: 1234
+        number:
+          description: Number of person's pasport.
+          type: integer
+          format: int32
+          minLength: 6
+          maxLength: 6
+          example: 123456
+        placeOfIssue:
+          description: Place where person recieved passport.
+          type: string
+          maxLength: 255
+          example: ''
+        dateOfIssue:
+          description: Date when a person recieved passport.
+          type: string
+          format: date
+          example: '1980-02-07'
+        departmentCode:
+          description: Department code where person recieved passport.
+          type: string
+          minLength: 7
+          maxLength: 7
+          example: '123-456'
+
+    AddressData:
+      description: Represents a person's address.
+      type: object
+      properties:
+        street:
+          description: The person's street of living.
+          type: string
+          maxLength: 255
+          example: 'Beethovenstrasse'
+        houseNumber:
+          description: The person's house number of living.
+          type: integer
+          format: int32
+          example: 12
+        houseBuilding:
+          description: The person's house building of living.
+          type: integer
+          format: int32
+          example: 1
+        houseLetter:
+          description: The person's house letter of living.
+          type: string
+          example: 'A'
+        flat:
+          description: The person's flat number of living.
+          type: integer
+          format: int32
+          example: 123
+        city:
+          description: The person's city of living.
+          type: string
+          maxLength: 255
+          example: 'Moscow'
+        postalCode:
+          description: Postal code of the address.
+          type: string
+          maxLength: 255
+          example: '123456'
+
+    PersonSocialNetworkData:
+      description: Represents a social networks of a person.
+      type: object
+      properties:
+        id:
+          description: Universally unique and immutable identifier of the person social network.
+          type: string
+          maxLength: 255
+          example: '123e4567-e89b-12d3-a456-426655440000'
+        personId:
+          $ref: '../../common/rest/primitives.yaml#/components/schemas/personId'
+        socialNetworkId:
+          $ref: '#/components/schemas/socialNetworkId'
+        link:
+          description: Link to the person's profile in social network
+          type: string
+          maxLength: 255
+          example: 'https://linkedin.com/person/VasilyPupkin'
+
+    PersonMessengerData:
+      description: Represents a messengers of a person.
+      type: object
+      properties:
+        id:
+          description: Universally unique and immutable identifier of the person messenger.
+          type: string
+          maxLength: 255
+          example: '123e4567-e89b-12d3-a456-426655440000'
+        personId:
+          $ref: '../../common/rest/primitives.yaml#/components/schemas/personId'
+        socialNetworkId:
+          $ref: '#/components/schemas/messengerId'
+        link:
+          description: Link to the person's profile in messenger
+          type: string
+          maxLength: 255
+          example: '@VasilyPupkin'
+
+    PersonListResponse:
+      description: Response containing a list of person profiles.
+      type: object
+      properties:
+        data:
+          description: Successfully retrieved results.
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonData'
+        meta:
+          description: Metainformation for the provided results.
+          type: object
+          properties:
+            pagination:
+              $ref: '../../common/rest/schemas.yaml#/components/schemas/PaginationData'
+          required:
+            - pagination
+      required:
+        - data
+        - meta
