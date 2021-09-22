@@ -1,6 +1,6 @@
 @startuml ru-levelp-srv-person-profile-domain
 
-!include ./common/plantuml/domain.plantuml
+!include ../../common/plantuml/domain.plantuml
 
 class Person {
     + id: UUID [1]

@@ -49,3 +49,4 @@ build/
 .env
 .nodeenv/
 /tmp/
+**/gen*
