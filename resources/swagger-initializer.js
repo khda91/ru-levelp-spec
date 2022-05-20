@@ -3,7 +3,7 @@ window.onload = function() {
 
   // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   window.ui = SwaggerUIBundle({
-    url: "../components/ru-levelp-srv-person-profile/rest-v1.yaml",
+    url: "https://raw.githubusercontent.com/khda91/ru-levelp-spec/main/components/ru-levelp-srv-person-profile/rest-v1.yaml",
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
