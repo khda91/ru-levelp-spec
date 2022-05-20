@@ -11,11 +11,21 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 
+tags:
+  - name: people
+    description: People related endpoints.
+  - name: messengers
+    description: Messengers related endpoints.
+  - name: social-networks
+    description: Social networks related endpoints.
+
 paths:
   /people:
     get:
       description: Returns all people found according to the search criteria.
       operationId: getPeople
+      tags:
+        - people
       parameters:
         - $ref: '../../common/rest/parameters.yaml#/components/parameters/limit'
         - $ref: '../../common/rest/parameters.yaml#/components/parameters/offset'
@@ -54,10 +64,11 @@ paths:
           $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
         '500':
           $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
-  /person:
     post:
       description: Creates a new person record.
       operationId: createPerson
+      tags:
+        - people
       requestBody:
         content:
           application/json:
@@ -78,12 +89,14 @@ paths:
           $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
         '500':
           $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
-  /person/{personId}:
+  /people/{personId}:
     parameters:
       - $ref: '#/components/parameters/personId'
     get:
       description: Returns profile data of the given person.
       operationId: getPerson
+      tags:
+        - people
       responses:
         '200':
           description: The person profile has been successfully found. The body contains the result.
@@ -97,6 +110,310 @@ paths:
           $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
         '403':
           $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /people/{personId}/messengers:
+    parameters:
+      - $ref: '#/components/parameters/personId'
+    get:
+      description: Returns all person messenger accounts according to search criteria.
+      operationId: getPersonMessengers
+      tags:
+        - people
+      parameters:
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/limit'
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/offset'
+        - name: messenger
+          description: |
+            The comma-separated list of the messenger identifiers to filter the search results.
+            Only items with the given messengers are provided.
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/messengerId'
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: The request has been successfully processed. The body contains the result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonMessengerListResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+    post:
+      description: Add a new messenger to a person.
+      operationId: addMessengerToPerson
+      tags:
+        - people
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonMessengerData'
+      responses:
+        '201':
+          description: Request has been successfully processed.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /people/{personId}/messengers/{messengerId}:
+    parameters:
+      - $ref: '#/components/parameters/personId'
+      - name: messengerId
+        description: Universally unique identifier of the person messenger.
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/messengerId'
+    delete:
+      description: Removes the messenger from a person.
+      operationId: removeMessengerFromPerson
+      tags:
+        - people
+      responses:
+        '204':
+          description: Request has been successfully processed.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '404':
+          $ref: '../../common/rest/errors.yaml#/components/responses/NotFound'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /people/{personId}/social-network:
+    parameters:
+      - $ref: '#/components/parameters/personId'
+    get:
+      description: Returns all person social network accounts according to search criteria.
+      operationId: getPersonSocialNetworks
+      tags:
+        - people
+      parameters:
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/limit'
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/offset'
+        - name: socialNetwork
+          description: |
+            The comma-separated list of the social network identifiers to filter the search results.
+            Only items with the given social network are provided.
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/socialNetworkId'
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: The request has been successfully processed. The body contains the result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonSocialNetworkListResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+    post:
+      description: Add a new social network to a person.
+      operationId: addSocialNetworkToPerson
+      tags:
+        - people
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonSocialNetworkData'
+      responses:
+        '201':
+          description: Request has been successfully processed.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /people/{personId}/social-network/{socialNetworkId}:
+    parameters:
+      - $ref: '#/components/parameters/personId'
+      - name: socialNetworkId
+        description: Universally unique identifier of the person social network.
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/socialNetworkId'
+    delete:
+      description: Removes the social network from a person.
+      operationId: removeSocialNetworkFromPerson
+      tags:
+        - people
+      responses:
+        '204':
+          description: Request has been successfully processed.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '404':
+          $ref: '../../common/rest/errors.yaml#/components/responses/NotFound'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /messengers:
+    get:
+      description: Returns all messengers found according to search criteria.
+      operationId: getMessengers
+      tags:
+        - messengers
+      parameters:
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/limit'
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/offset'
+      responses:
+        '200':
+          description: The request has been successfully processed. The body contains the result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessengerListResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /messengers/{messengerId}:
+    parameters:
+      - name: messengerId
+        description: Universally unique identifier of the messenger.
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/messengerId'
+    put:
+      description: Create a new messenger record.
+      operationId: createMessenger
+      tags:
+        - messengers
+      responses:
+        '204':
+          description: The request has been successfully processed. A new tag is created.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+    delete:
+      description: Deletes an existing messenger record.
+      operationId: deleteMessenger
+      tags:
+        - messengers
+      responses:
+        '204':
+          description: The request has been successfully processed.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '404':
+          $ref: '../../common/rest/errors.yaml#/components/responses/NotFound'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /social-networks:
+    get:
+      description: Returns all social networks found according to search criteria.
+      operationId: getSocialNetworks
+      tags:
+        - social-networks
+      parameters:
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/limit'
+        - $ref: '../../common/rest/parameters.yaml#/components/parameters/offset'
+      responses:
+        '200':
+          description: The request has been successfully processed. The body contains the result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialNetworkListResponse'
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+  /social-networks/{socialNetworkId}:
+    parameters:
+      - name: socialNetworkId
+        description: Universally unique identifier of the social network.
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/socialNetworkId'
+    put:
+      description: Create a new social network record.
+      operationId: createSocialNetwork
+      tags:
+        - social-networks
+      responses:
+        '204':
+          description: The request has been successfully processed. A new tag is created.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '500':
+          $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
+    delete:
+      description: Deletes an existing social network record.
+      operationId: deleteSocialNetwork
+      tags:
+        - social-networks
+      responses:
+        '204':
+          description: The request has been successfully processed.
+        '400':
+          $ref: '../../common/rest/errors.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../common/rest/errors.yaml#/components/responses/Forbidden'
+        '404':
+          $ref: '../../common/rest/errors.yaml#/components/responses/NotFound'
         '500':
           $ref: '../../common/rest/errors.yaml#/components/responses/InternalServerError'
 
@@ -114,7 +431,7 @@ components:
     personRole:
       description: The role of the person in the LevelUp Trainig Center
       type: string
-      enum: [ STUDENT, LECTOR, WORK_INSPECTOR ]
+      enum: [ STUDENT, LECTOR, WORK_INSPECTOR, ADMINISTRATOR ]
       example: 'LECTOR'
 
     socialNetworkId:
@@ -145,6 +462,11 @@ components:
           type: string
           maxLength: 255
           example: '+79211234567'
+        placeOfWork:
+          description: Place of work of the person.
+          type: string
+          maxLength: 255
+          example: 'Engineer'
         identity:
           $ref: '#/components/schemas/IdentityData'
         address:
@@ -184,27 +506,20 @@ components:
           type: string
           maxLength: 255
           example: '+79211234567'
+        placeOfWork:
+          description: Place of work of the person.
+          type: string
+          maxLength: 255
+          example: 'Engineer'
         identity:
           $ref: '#/components/schemas/IdentityData'
         address:
           $ref: '#/components/schemas/AddressData'
-        socialNetworks:
-          description: List of person's accounts in social networks.
-          type: array
-          items:
-            $ref: '#/components/schemas/PersonSocialNetworkData'
-        messengers:
-          description: List of person's accounts in messengers.
-          type: array
-          items:
-            $ref: '#/components/schemas/PersonMessengerData'
       required:
         - id
         - role
         - email
         - phoneNumber
-        - socialNetworks
-        - messengers
 
     IdentityData:
       description: Represents a person's personal data
@@ -355,6 +670,30 @@ components:
           maxLength: 255
           example: '@VasilyPupkin'
 
+    CreatePersonMessengerData:
+      description: Represents attributes required to add a messenger with some predefined type to a person.
+      type: object
+      properties:
+        messengerId:
+          $ref: '#/components/schemas/messengerId'
+        nickname:
+          description: User name of the person in messenger.
+          type: string
+          maxLength: 255
+          example: "@ivan_ivanov"
+
+    CreatePersonSocialNetworkData:
+      description: Represents attributes required to add a social network with some predefined type to a person.
+      type: object
+      properties:
+        messengerId:
+          $ref: '#/components/schemas/socialNetworkId'
+        link:
+          description: Link to the person in social network.
+          type: string
+          maxLength: 255
+          example: "https://vk.com/id123456"
+
     PersonListResponse:
       description: Response containing a list of person profiles.
       type: object
@@ -366,6 +705,108 @@ components:
             $ref: '#/components/schemas/PersonData'
         meta:
           description: Metainformation for the provided results.
+          type: object
+          properties:
+            pagination:
+              $ref: '../../common/rest/schemas.yaml#/components/schemas/PaginationData'
+          required:
+            - pagination
+      required:
+        - data
+        - meta
+
+    PersonMessengerListResponse:
+      description: Response containing a list of person messengers.
+      type: object
+      properties:
+        data:
+          description: Successfully retrieved results.
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonMessengerData'
+        meta:
+          description: Meta information for the provided results.
+          type: object
+          properties:
+            pagination:
+              $ref: '../../common/rest/schemas.yaml#/components/schemas/PaginationData'
+          required:
+            - pagination
+      required:
+        - data
+        - meta
+
+    PersonSocialNetworkListResponse:
+      description: Response containing a list of person social networks.
+      type: object
+      properties:
+        data:
+          description: Successfully retrieved results.
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonSocialNetworkData'
+        meta:
+          description: Meta information for the provided results.
+          type: object
+          properties:
+            pagination:
+              $ref: '../../common/rest/schemas.yaml#/components/schemas/PaginationData'
+          required:
+            - pagination
+      required:
+        - data
+        - meta
+
+    MessengerData:
+      description: Representing a unique messenger
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/messengerId'
+      required:
+        - id
+
+    MessengerListResponse:
+      description: Response containing a list of messengers.
+      type: object
+      properties:
+        data:
+          description: Successfully retrieved results.
+          type: array
+          items:
+            $ref: '#/components/schemas/MessengerData'
+        meta:
+          description: Meta information for the provided results.
+          type: object
+          properties:
+            pagination:
+              $ref: '../../common/rest/schemas.yaml#/components/schemas/PaginationData'
+          required:
+            - pagination
+      required:
+        - data
+        - meta
+
+    SocialNetworkData:
+      description: Representing a unique social network
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/socialNetworkId'
+      required:
+        - id
+
+    SocialNetworkListResponse:
+      description: Response containing a list of social networks.
+      type: object
+      properties:
+        data:
+          description: Successfully retrieved results.
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetworkData'
+        meta:
+          description: Meta information for the provided results.
           type: object
           properties:
             pagination:

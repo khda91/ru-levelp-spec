@@ -11,12 +11,24 @@ class Person {
     + address: Address
     + socialNetworks: PersonSocialNetwork [0..*]
     + messengers: PersonMessenger [0..*]
+    --
+    + changePhoneNumber()
+    + changeEmail()
+    + supplementIdentity()
+    + changeIdentity()
+    + supplementAddress()
+    + changeAddress()
+    + addSocialNetwork()
+    + removeSocialNetwork()
+    + addMessenger()
+    + removeMessenger()
 }
 
 enum PersonRole {
     STUDENT
     LECTOR
     WORK_INSPECTOR
+    ADMINISTRATOR
 }
 
 enum Gender {
@@ -50,7 +62,7 @@ class Address {
     + houseLetter: String [0..1]
     + flat: Integer [0..1]
     + city: String
-    + postalCode: String
+    + postalCode: Integer [0..1]
 }
 
 class PersonSocialNetwork {
