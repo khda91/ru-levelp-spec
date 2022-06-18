@@ -19,6 +19,13 @@ tags:
   - name: social-networks
     description: Social networks related endpoints.
 
+servers:
+  - url: TBU
+    description: TBU
+    variables:
+      basePath:
+        default: srv-person-profile
+
 paths:
   /people:
     get:
@@ -437,12 +444,16 @@ components:
     socialNetworkId:
       description: Universally unique and immutable identifier of the social network.
       type: string
+      pattern: ([A-Z0-9_]*)
+      minLength: 2
       maxLength: 255
       example: 'LINKED_IN'
 
     messengerId:
       description: Universally unique and immutable identifier of the messenger.
       type: string
+      pattern: ([A-Z0-9_]*)
+      minLength: 2
       maxLength: 255
       example: 'TELEGRAM'
 
