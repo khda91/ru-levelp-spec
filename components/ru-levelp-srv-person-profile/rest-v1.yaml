@@ -24,7 +24,7 @@ servers:
     description: TBU
     variables:
       basePath:
-        default: srv-person-profile
+        default: /srv-person-profile
 
 paths:
   /people:
