@@ -673,9 +673,9 @@ components:
           example: '123e4567-e89b-12d3-a456-426655440000'
         personId:
           $ref: '../../common/rest/primitives.yaml#/components/schemas/personId'
-        socialNetworkId:
+        messengerId:
           $ref: '#/components/schemas/messengerId'
-        link:
+        nickname:
           description: Link to the person's profile in messenger
           type: string
           maxLength: 255
@@ -697,7 +697,7 @@ components:
       description: Represents attributes required to add a social network with some predefined type to a person.
       type: object
       properties:
-        messengerId:
+        socialNetworkId:
           $ref: '#/components/schemas/socialNetworkId'
         link:
           description: Link to the person in social network.
