@@ -48,8 +48,8 @@ class Identity {
 }
 
 class Passport {
-    + series: Integer [1]
-    + number: Integer [1]
+    + series: String [1]
+    + number: String [1]
     + placeOfIssue: String [1]
     + dateOfIssue: Date [1]
     + departmentCode: String [0..1]
@@ -62,7 +62,7 @@ class Address {
     + houseLetter: String [0..1]
     + flat: Integer [0..1]
     + city: String
-    + postalCode: Integer [0..1]
+    + postalCode: String [0..1]
 }
 
 class PersonSocialNetwork {

@@ -574,32 +574,33 @@ components:
       type: object
       properties:
         series:
-          description: Series of person's pasport.
-          type: integer
-          format: int32
+          description: Series of person's passport.
+          type: string
+          pattern: '\d{4}'
           minLength: 4
           maxLength: 4
           example: 1234
         number:
-          description: Number of person's pasport.
-          type: integer
-          format: int32
+          description: Number of person's passport.
+          type: string
+          pattern: '\d{6}'
           minLength: 6
           maxLength: 6
           example: 123456
         placeOfIssue:
-          description: Place where person recieved passport.
+          description: Place where person received passport.
           type: string
           maxLength: 255
           example: ''
         dateOfIssue:
-          description: Date when a person recieved passport.
+          description: Date when a person received passport.
           type: string
           format: date
           example: '1980-02-07'
         departmentCode:
-          description: Department code where person recieved passport.
+          description: Department code where person received passport.
           type: string
+          pattern: '(\d{3}-\d{3})'
           minLength: 7
           maxLength: 7
           example: '123-456'
@@ -715,7 +716,7 @@ components:
           items:
             $ref: '#/components/schemas/PersonData'
         meta:
-          description: Metainformation for the provided results.
+          description: Meta information for the provided results.
           type: object
           properties:
             pagination:
